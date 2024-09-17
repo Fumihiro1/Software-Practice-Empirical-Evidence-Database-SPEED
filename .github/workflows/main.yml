@@ -1,0 +1,45 @@
+name: CI_action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy: 
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with: 
+        node-version: ${{ matrix.node-version }}
+
+    - name: Cache Node modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          SPEED-app/SPEED-frontend/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('SPEED-app/SPEED-frontend/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: SPEED-app/SPEED-frontend
+
+    - name: Run the tests
+      run: npm test
+      working-directory: SPEED-app/SPEED-frontend
+
+    - name: Build
+      run: npm run build
+      working-directory: SPEED-app/SPEED-frontend
