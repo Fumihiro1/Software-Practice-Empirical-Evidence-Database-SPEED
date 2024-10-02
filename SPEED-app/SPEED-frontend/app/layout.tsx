@@ -48,7 +48,7 @@ export default function RootLayout({
                   </Link>
                 </li>
                 <li className="mb-2">
-                  <Link href="/moderation" className="text-white hover:bg-gray-600 block py-2 px-3 rounded">
+                  <Link href="./moderation" className="text-white hover:bg-gray-600 block py-2 px-3 rounded">
                     Moderation
                   </Link>
                 </li>

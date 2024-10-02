@@ -32,12 +32,12 @@ const SubmitArticle = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700" htmlFor="evidence">
-            Evidences
+            Date of Publish
           </label>
           <textarea
             id="evidence"
             name="evidence"
-            rows={6}
+            rows={1}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             required
           />
