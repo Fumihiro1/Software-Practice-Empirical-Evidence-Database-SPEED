@@ -36,21 +36,25 @@ const Page = () => {
   return (
     <PageTemplate
       pageContent={
-        <div>
-          <h1>Articles</h1>
-          <ul>
+        <main className = "p-6 flex-1 bg-gray-100">
+            <h2 className="text-2xl font-semibold mb-4">
+                View Articles
+            </h2>
+            <p className="mb-4">
+                Use SPEED to search and analyse claims about various Software Engineering practices.
+            </p>
+            {/* Map through articles and render each one */}
             {articles.map((article:any) => (
-              <li key={article.isbn}>
-                <h2>{article.title}</h2>
-                <p>{article.author}</p>
+                <div key={article.isbn} className="bg-white p-4 rounded shadow mb-4">
+                <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
+                <p className="mb-2"><strong>Author:</strong> {article.author}</p>
                 <p>{article.description}</p>
                 <p>{article.published_date}</p>
                 <p>{article.publisher}</p>
                 <p>{article.update_date}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+                </div>
+          ))}
+        </main>
       }
     />
   );
