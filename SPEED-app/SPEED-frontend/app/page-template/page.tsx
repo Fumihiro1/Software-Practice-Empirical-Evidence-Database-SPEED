@@ -2,7 +2,7 @@ import react from 'react';
 
 const Page = ({pageContent}: {pageContent: React.JSX.Element}) => {
   return (
-    <div className = "flex h-screen">
+    <div className = "flex h-screen bg-gray-100">
 
       {/* Sidebar */}
       <aside className = "w-1/14 bg-gray-800 text-white flex flex-col">
