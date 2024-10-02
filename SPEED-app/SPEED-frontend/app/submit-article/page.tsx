@@ -1,4 +1,4 @@
-// app/submit-article/page.tsx
+
 const SubmitArticle = () => {
   return (
     <main className="container mx-auto p-6">
@@ -32,7 +32,7 @@ const SubmitArticle = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700" htmlFor="evidence">
-            Evidence or Claim
+            Evidences
           </label>
           <textarea
             id="evidence"
