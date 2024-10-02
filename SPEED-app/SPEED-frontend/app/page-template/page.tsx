@@ -23,12 +23,12 @@ const Page = ({pageContent}: {pageContent: React.JSX.Element}) => {
               </a>
             </li>
             <li className = "mb-2">
-              <a href = "submitarticle" className = "text-white hover:bg-gray-600 block py-2 px-3 rounded">
+              <a href = "submit-article" className = "text-white hover:bg-gray-600 block py-2 px-3 rounded">
                 Submit Article
               </a>
             </li>
             <li className = "mb-2">
-              <a href = "viewarticles" className = "text-white hover:bg-gray-600 block py-2 px-3 rounded">
+              <a href = "view-articles" className = "text-white hover:bg-gray-600 block py-2 px-3 rounded">
                 View Articles
               </a>
             </li>
