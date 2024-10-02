@@ -1,14 +1,18 @@
 "use client"; 
 import { useState } from "react";
+import PageTemplate from '../page-template/page';
 
 
 const SubmitArticle = () => {
   // State to store form data
   const [formData, setFormData] = useState({
     title: "",
-    content: "",
-    date: "",
+    isbn: "",
     author: "",
+    description: "",
+    published_date: "",
+    publisher: "",
+    updated_date: "",
   });
 
   // Handle form input changes
@@ -20,12 +24,11 @@ const SubmitArticle = () => {
     });
   };
   
-
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8082/articles", {
+      const response = await fetch("http://localhost:8082/api/books", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,9 +40,12 @@ const SubmitArticle = () => {
         alert("Article submitted successfully!");
         setFormData({
           title: "",
-          content: "",
-          date: "",
+          isbn: "",
           author: "",
+          description: "",
+          published_date: "",
+          publisher: "",
+          updated_date: "",
         });
       } else {
         alert("Failed to submit the article. Please try again.");
@@ -50,13 +56,14 @@ const SubmitArticle = () => {
     }
   };
 
-  return (
+
+    return <PageTemplate pageContent={ 
     <main className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Submit an Article</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700" htmlFor="title">
-            Article Title
+            Title
           </label>
           <input
             type="text"
@@ -70,13 +77,28 @@ const SubmitArticle = () => {
         </div>
 
         <div>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="title">
+            ISBN
+          </label>
+          <input
+            type="text"
+            id="isbn"
+            name="isbn"
+            value={formData.isbn}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+        <div>
           <label className="block text-sm font-medium text-gray-700" htmlFor="description">
-            Article Content
+            Description
           </label>
           <textarea
-            id="content"
-            name="content"
-            value={formData.content}
+            id="description"
+            name="description"
+            value={formData.description}
             onChange={handleChange}
             rows={4}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -86,13 +108,28 @@ const SubmitArticle = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700" htmlFor="date">
-            Date of Publish
+            Author
+          </label>
+          <input
+            type="text"
+            id="author"
+            name="author"
+            value={formData.author}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
+            Publish Date
           </label>
           <input
             type="date"
-            id="date"
-            name="date"
-            value={formData.date}
+            id="published_date"
+            name="published_date"
+            value={formData.published_date}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             required
@@ -101,13 +138,28 @@ const SubmitArticle = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700" htmlFor="author">
-            Author Name
+            Publisher
           </label>
           <input
             type="text"
-            id="author"
-            name="author"
-            value={formData.author}
+            id="publisher"
+            name="publisher"
+            value={formData.publisher}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
+            Publish Date
+          </label>
+          <input
+            type="date"
+            id="updated_date"
+            name="updated_date"
+            value={formData.updated_date}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             required
@@ -122,7 +174,8 @@ const SubmitArticle = () => {
         </button>
       </form>
     </main>
-  );
+  }/>;
 };
+
 
 export default SubmitArticle;
