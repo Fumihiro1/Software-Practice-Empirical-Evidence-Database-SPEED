@@ -1,7 +1,5 @@
 "use client"; 
 import { useState } from "react";
-import PageTemplate from '../page-template/page';
-
 
 const SubmitArticle = () => {
   // State to store form data
