@@ -12,95 +12,57 @@ import {
 import { BookService } from './book.service';
 import { CreateBookDto } from './create-book.dto';
 import { error } from 'console';
+
 @Controller('api/books')
 export class BookController {
-  constructor(private readonly bookService: BookService) {}
-  @Get('/test')
-  test() {
-    return this.bookService.test();
-  } // Get all books
-  @Get('/')
-  async findAll() {
+  constructor(private readonly bookService: BookService) { }
+
+  // Get all approved books for the view page
+  @Get('/approved')
+  async findApproved() {
+    return this.bookService.findApproved();
+  }
+
+  // Fetch pending and rejected articles for the moderation page
+  @Get('/pending')
+  async findPendingAndRejected() {
+    return this.bookService.findPendingAndRejected();
+  }
+
+  // Approve or reject an article via id
+  @Post('/moderate/:id')
+  async moderateBook(@Param('id') id: string, @Body('approve') approve: boolean) {
     try {
-      return this.bookService.findAll();
+      await this.bookService.moderateBook(id, approve);
+      return { message: `Book ${approve ? 'approved' : 'rejected'} successfully` };
     } catch {
       throw new HttpException(
         {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No Books found',
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Unable to moderate this book',
         },
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
         { cause: error },
       );
     }
   }
-  // Get one book via id
-  @Get('/:id')
-  async findOne(@Param('id') id: string) {
-    try {
-      return this.bookService.findOne(id);
-    } catch {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No Book found',
-        },
-        HttpStatus.NOT_FOUND,
-        { cause: error },
-      );
-    }
-  }
-  // Create/add a book
+
   @Post('/')
   async addBook(@Body() createBookDto: CreateBookDto) {
+    console.log("Received Data:", createBookDto);  // Log the received data for inspection
     try {
       await this.bookService.create(createBookDto);
       return { message: 'Book added successfully' };
-    } catch {
+    } catch (error) {
+      console.error("Error while adding book:", error);  // Log any errors
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
           error: 'Unable to add this book',
         },
-        HttpStatus.BAD_REQUEST,
-        { cause: error },
+        HttpStatus.BAD_REQUEST
       );
     }
   }
-  // Update a book
-  @Put('/:id')
-  async updateBook(
-    @Param('id') id: string,
-    @Body() createBookDto: CreateBookDto,
-  ) {
-    try {
-      await this.bookService.update(id, createBookDto);
-      return { message: 'Book updated successfully' };
-    } catch {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: 'Unable to update this book',
-        },
-        HttpStatus.BAD_REQUEST,
-        { cause: error },
-      );
-    }
-  }
-  // Delete a book via id
-  @Delete('/:id')
-  async deleteBook(@Param('id') id: string) {
-    try {
-      return await await this.bookService.delete(id);
-    } catch {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No such a book',
-        },
-        HttpStatus.NOT_FOUND,
-        { cause: error },
-      );
-    }
-  }
+
 }

@@ -2,58 +2,59 @@
 
 import React, { useEffect, useState } from 'react';
 import PageTemplate from '../page-template/page';
+import axios from 'axios';
 
 const Page = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  // Fetch articles when the component mounts
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
+
+  // Fetch approved articles when the component mounts
   useEffect(() => {
-    const fetchArticles = async () => {
+    const fetchApprovedArticles = async () => {
       try {
-        const response = await fetch('http://localhost:8082/api/books');
-        if (!response.ok) {
-          throw new Error('Failed to fetch articles');
-        }
-        const data = await response.json();
-        setArticles(data);
-      } catch (error: any) {
-        setError(error.message);
+        const response = await axios.get(`${apiUrl}/api/books/approved`);
+        setArticles(response.data);
+      } catch (err) {
+        setError('Failed to fetch approved articles');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchArticles();
+    fetchApprovedArticles();
   }, []);
 
-  // Handle loading and error states
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
-  // Render the page content with articles
   return (
     <PageTemplate
       pageContent={
-        <main className = "p-6 flex-1 bg-gray-100">
-            <h2 className="text-2xl font-semibold mb-4">
-                View Articles
-            </h2>
-            <p className="mb-4">
-                Use SPEED to search and analyse claims about various Software Engineering practices.
-            </p>
-            {/* Map through articles and render each one */}
-            {articles.map((article:any) => (
-                <div key={article.isbn} className="bg-white p-4 rounded shadow mb-4">
+        <main className="p-6 flex-1 bg-gray-100">
+          <h2 className="text-2xl font-semibold mb-4">View Articles</h2>
+          <p className="mb-4">
+            Use SPEED to search and analyse claims about various Software Engineering practices.
+          </p>
+          {/* Map through approved articles and render each one */}
+          {articles.length === 0 ? (
+            <p>No articles to display.</p>
+          ) : (
+            articles.map((article: any) => (
+              <div key={article._id} className="bg-white p-4 rounded shadow mb-4">
                 <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
-                <p className="mb-2"><strong>Author:</strong> {article.author}</p>
-                <p>{article.description}</p>
-                <p>{article.published_date}</p>
-                <p>{article.publisher}</p>
-                <p>{article.update_date}</p>
-                </div>
-          ))}
+                <p className="mb-2">
+                  <strong>Author:</strong> {article.author || "Unknown"}
+                </p>
+                <p>{article.description || "No description available"}</p>
+                <p>{article.published_date || "No publication date"}</p>
+                <p>{article.publisher || "Unknown publisher"}</p>
+                <p>{article.updated_date || "No update date"}</p>
+              </div>
+            ))
+          )}
         </main>
       }
     />

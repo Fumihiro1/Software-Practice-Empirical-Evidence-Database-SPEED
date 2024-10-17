@@ -27,15 +27,17 @@ const SubmitArticle = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  
+    // Use the formData directly without converting the dates
     try {
       const response = await fetch("http://localhost:8082/api/books", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData),  // Send formData directly
       });
-
+  
       if (response.ok) {
         alert("Article submitted successfully!");
         setFormData({
@@ -55,6 +57,8 @@ const SubmitArticle = () => {
       alert("An error occurred while submitting the article.");
     }
   };
+  
+  
 
 
     return <PageTemplate pageContent={ 
