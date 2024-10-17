@@ -13,7 +13,3 @@ body {
 a {
   @apply no-underline text-white;
 }
-
-a:hover {
-  @apply underline;
-}
