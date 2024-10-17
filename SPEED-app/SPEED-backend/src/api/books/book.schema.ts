@@ -35,6 +35,9 @@ export class Book {
 
   @Prop({ default: false })
   isDeleted: boolean;
+
+  @Prop()
+  email: string;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);

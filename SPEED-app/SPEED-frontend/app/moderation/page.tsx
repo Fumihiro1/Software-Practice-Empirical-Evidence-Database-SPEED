@@ -1,53 +1,56 @@
-"use client"; // Declare this file as a Client Component
-
-import React, { useEffect, useState } from 'react';
+"use client";
+import React, { useEffect, useState } from "react";
 import PageTemplate from '../page-template/page';
 import axios from 'axios';
 
 const Moderation = () => {
-  const [articles, setArticles] = useState([]);
+  const [pendingArticles, setPendingArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
 
-  // Fetch pending and rejected articles when the component mounts
+  // Fetch pending articles when the component mounts
   useEffect(() => {
-    const fetchPendingAndRejectedArticles = async () => {
+    const fetchPendingArticles = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/books/pending`);
-        setArticles(response.data);
+        const response = await axios.get(`${apiUrl}/api/books/pending`);  // Fetch only pending articles
+        setPendingArticles(response.data);
       } catch (err) {
-        setError('Failed to fetch pending and rejected articles');
+        setError('Failed to fetch pending articles.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPendingAndRejectedArticles();
+    fetchPendingArticles();
   }, []);
 
-  // Approve article
+  // Handle approval
   const handleApprove = async (id: string) => {
     try {
       await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: true });
-      setArticles(prev => prev.filter(article => article._id !== id)); // Remove from list
+      // Remove the approved article from the pending list
+      setPendingArticles(pendingArticles.filter((article) => article._id !== id));
+      alert("Article approved!");
     } catch (err) {
-      setError('Failed to approve article');
+      alert("Failed to approve the article.");
     }
   };
 
-  // Reject article
+  // Handle rejection
   const handleReject = async (id: string) => {
     try {
       await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: false });
-      setArticles(prev => prev.filter(article => article._id !== id)); // Remove from list
+      // Remove the rejected article from the pending list
+      setPendingArticles(pendingArticles.filter((article) => article._id !== id));
+      alert("Article rejected!");
     } catch (err) {
-      setError('Failed to reject article');
+      alert("Failed to reject the article.");
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading articles...</p>;
   if (error) return <p>{error}</p>;
 
   return (
@@ -55,23 +58,32 @@ const Moderation = () => {
       pageContent={
         <main className="container mx-auto p-6">
           <h1 className="text-3xl font-bold mb-6">Moderation Panel</h1>
-          <div className="space-y-6">
-            {articles.length === 0 ? (
-              <p>No articles pending for moderation.</p>
-            ) : (
-              articles.map((article: any) => (
-                <div key={article._id} className="bg-white p-4 rounded shadow">
-                  <h2 className="text-2xl font-semibold mb-2">{article.title}</h2>
-                  <p className="mb-4 text-gray-700"><strong>Author:</strong> {article.author}</p>
-                  <p className="mb-4 text-gray-700"><strong>Content:</strong> {article.content}</p>
-                  <div className="flex space-x-4">
-                    <button onClick={() => handleApprove(article._id)} className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Approve</button>
-                    <button onClick={() => handleReject(article._id)} className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Reject</button>
-                  </div>
+
+          {pendingArticles.length === 0 ? (
+            <p>No articles to moderate.</p>
+          ) : (
+            pendingArticles.map((article) => (
+              <div key={article._id} className="bg-white p-4 rounded shadow mb-4">
+                <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
+                <p><strong>Author:</strong> {article.author}</p>
+                <p>{article.description}</p>
+                <div className="mt-4 flex space-x-4">
+                  <button
+                    onClick={() => handleApprove(article._id)}
+                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => handleReject(article._id)}
+                    className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+                  >
+                    Reject
+                  </button>
                 </div>
-              ))
-            )}
-          </div>
+              </div>
+            ))
+          )}
         </main>
       }
     />

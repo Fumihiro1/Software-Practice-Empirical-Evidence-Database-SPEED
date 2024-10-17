@@ -2,7 +2,6 @@
 import { useState } from "react";
 import PageTemplate from '../page-template/page';
 
-
 const SubmitArticle = () => {
   // State to store form data
   const [formData, setFormData] = useState({
@@ -13,6 +12,7 @@ const SubmitArticle = () => {
     published_date: "",
     publisher: "",
     updated_date: "",
+    email: "",  // Add email field
   });
 
   // Handle form input changes
@@ -28,7 +28,6 @@ const SubmitArticle = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
-    // Use the formData directly without converting the dates
     try {
       const response = await fetch("http://localhost:8082/api/books", {
         method: "POST",
@@ -48,6 +47,7 @@ const SubmitArticle = () => {
           published_date: "",
           publisher: "",
           updated_date: "",
+          email: "",  // Reset email field
         });
       } else {
         alert("Failed to submit the article. Please try again.");
@@ -57,11 +57,8 @@ const SubmitArticle = () => {
       alert("An error occurred while submitting the article.");
     }
   };
-  
-  
 
-
-    return <PageTemplate pageContent={ 
+  return <PageTemplate pageContent={ 
     <main className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Submit an Article</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -81,7 +78,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="title">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="isbn">
             ISBN
           </label>
           <input
@@ -111,7 +108,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="author">
             Author
           </label>
           <input
@@ -126,7 +123,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="published_date">
             Publish Date
           </label>
           <input
@@ -141,7 +138,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="author">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="publisher">
             Publisher
           </label>
           <input
@@ -156,14 +153,30 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
-            Publish Date
+          <label className="block text-sm font-medium text-gray-700" htmlFor="updated_date">
+            Updated Date
           </label>
           <input
             type="date"
             id="updated_date"
             name="updated_date"
             value={formData.updated_date}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+        {/* Email Field */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="email">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             required
@@ -180,6 +193,5 @@ const SubmitArticle = () => {
     </main>
   }/>;
 };
-
 
 export default SubmitArticle;

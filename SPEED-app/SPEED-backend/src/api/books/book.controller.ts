@@ -26,7 +26,7 @@ export class BookController {
   // Fetch pending and rejected articles for the moderation page
   @Get('/pending')
   async findPendingAndRejected() {
-    return this.bookService.findPendingAndRejected();
+    return this.bookService.findPending();
   }
 
   // Approve or reject an article via id
@@ -112,4 +112,20 @@ export class BookController {
     }
   }
 
+  // Reject an article (moderate with false)
+  @Post('/reject/:id')
+  async rejectBook(@Param('id') id: string) {
+    try {
+      await this.bookService.moderateBook(id, false);  // Set approve as false to reject
+      return { message: 'Book rejected and email sent' };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Unable to reject the book and send email',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }
