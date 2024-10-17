@@ -1,6 +1,4 @@
 "use client";
-import PageTemplate from '../page-template/page';
-
 const Moderation = () => {
     const articles = [
       {
@@ -30,7 +28,7 @@ const Moderation = () => {
       // You can add API call here to reject the article
     };
 
-    return <PageTemplate pageContent={ 
+    return (
       <main className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Moderation Panel</h1>
   
@@ -66,7 +64,7 @@ const Moderation = () => {
           ))}
         </div>
       </main>
-    }/>;
+    );
   };
   
   export default Moderation;
