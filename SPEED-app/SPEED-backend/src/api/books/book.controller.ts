@@ -65,4 +65,51 @@ export class BookController {
     }
   }
 
+  // Get all books
+  @Get('/')
+  async findAll() {
+    return this.bookService.findAll();
+  }
+
+  // Get deleted articles
+  @Get('/deleted')
+  async findDeleted() {
+    return this.bookService.findDeleted();
+  }
+
+  // Get rejected articles
+  @Get('/rejected')
+  async findRejected() {
+    return this.bookService.findRejected();
+  }
+
+  // Accept a rejected article
+  @Post('/accept/:id')
+  async acceptRejected(@Param('id') id: string) {
+    return this.bookService.acceptRejected(id);
+  }
+
+  // Delete an article
+  @Delete('/:id')
+  async deleteBook(@Param('id') id: string) {
+    return this.bookService.deleteBook(id);
+  }
+
+  // Restore an article (set isDeleted to false)
+  @Post('/restore/:id')
+  async restoreBook(@Param('id') id: string) {
+    try {
+      await this.bookService.restoreBook(id);
+      return { message: 'Book restored successfully' };
+    } catch {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Unable to restore the book',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
 }

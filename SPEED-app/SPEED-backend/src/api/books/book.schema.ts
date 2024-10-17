@@ -32,6 +32,9 @@ export class Book {
 
   @Prop({ default: false }) // Track if an article was explicitly rejected
   isRejected: boolean;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);
