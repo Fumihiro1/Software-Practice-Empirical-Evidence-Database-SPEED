@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import StarRating from './StarRating'; // Import the updated StarRating component
 
 const Page = () => {
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
@@ -29,12 +30,8 @@ const Page = () => {
   if (loading) {
     return (
       <main className="p-6 flex-1 bg-gray-100">
-        <h2 className="text-2xl font-semibold mb-4">
-          View Articles
-        </h2>
-        <p className="mb-4">
-          Use SPEED to search and analyse claims about various Software Engineering practices.
-        </p>
+        <h2 className="text-2xl font-semibold mb-4">View Articles</h2>
+        <p className="mb-4">Use SPEED to search and analyse claims about various Software Engineering practices.</p>
         <p className="mb-4 text-gray-400">Loading...</p>
       </main>
     );
@@ -43,37 +40,37 @@ const Page = () => {
   if (error) {
     return (
       <main className="p-6 flex-1 bg-gray-100">
-        <h2 className="text-2xl font-semibold mb-4">
-          View Articles
-        </h2>
-        <p className="mb-4">
-          Use SPEED to search and analyse claims about various Software Engineering practices.
-        </p>
-        <p className="mb-4 text-red-500">An error occured while loading articles</p>
+        <h2 className="text-2xl font-semibold mb-4">View Articles</h2>
+        <p className="mb-4">Use SPEED to search and analyse claims about various Software Engineering practices.</p>
+        <p className="mb-4 text-red-500">An error occurred while loading articles</p>
       </main>
     );
   }
 
   // Render the page content with articles
   return (
-    <main className = "p-6 flex-1 bg-gray-100">
-      <h2 className="text-2xl font-semibold mb-4">
-          View Articles
-      </h2>
-      <p className="mb-4">
-          Use SPEED to search and analyse claims about various Software Engineering practices.
-      </p>
+    <main className="p-6 flex-1 bg-gray-100">
+      <h2 className="text-2xl font-semibold mb-4">View Articles</h2>
+      <p className="mb-4">Use SPEED to search and analyse claims about various Software Engineering practices.</p>
       {/* Map through articles and render each one */}
-      {articles.map((article:any) => (
-          <div key={article.isbn} className="bg-white p-4 rounded shadow mb-4">
+      {articles.map((article) => (
+        <div key={article.isbn} className="bg-white p-4 rounded shadow mb-4">
           <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
           <p className="mb-2"><strong>Author:</strong> {article.author}</p>
           <p>{article.description}</p>
           <p>{article.published_date}</p>
           <p>{article.publisher}</p>
           <p>{article.update_date}</p>
-          </div>
-        ))}
+          {/* Include the StarRating component */}
+          <StarRating
+            initialRating={0} // You can modify this to use an existing rating if available
+            onRatingChange={(newRating) => {
+              console.log(`Rating for ${article.title}: ${newRating}`);
+              // Here you can handle saving the rating if needed
+            }}
+          />
+        </div>
+      ))}
     </main>
   );
 };
