@@ -58,7 +58,9 @@ const SubmitArticle = () => {
     }
   };
 
-  return <PageTemplate pageContent={ 
+
+  // Page Content
+  return (
     <main className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Submit an Article</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -191,7 +193,7 @@ const SubmitArticle = () => {
         </button>
       </form>
     </main>
-  }/>;
+  );
 };
 
 export default SubmitArticle;
