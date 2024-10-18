@@ -1,5 +1,8 @@
+import react from 'react';
+import PageTemplate from './page-template/page';
+
 const Page = () => {
-  return (
+  return <PageTemplate pageContent={
     <main className = "p-6 flex-1 bg-gray-100">
      <h2 className="text-2xl font-semibold mb-4">
        Get help with Software Engineering evidence claims by participating in our community!
@@ -32,7 +35,7 @@ const Page = () => {
        </p>
      </div>
    </main>
-  );
+  }/>;
 }
 
 export default Page;

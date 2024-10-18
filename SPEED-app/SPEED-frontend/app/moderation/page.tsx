@@ -48,6 +48,7 @@ const Moderation = () => {
     } catch (err) {
       alert("Failed to reject the article.");
     }
+  };
 
   if (loading) return <p>Loading articles...</p>;
   if (error) return <p>{error}</p>;
