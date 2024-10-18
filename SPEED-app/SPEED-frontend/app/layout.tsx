@@ -47,6 +47,11 @@ export default function RootLayout({
                     Moderation
                   </a>
                 </li>
+                <li className="mb-2">
+                  <a href="manage-articles" className="text-white hover:bg-gray-600 block py-2 px-3 rounded">
+                    Manage
+                  </a>
+                </li>
               </ul>
             </nav>
           </aside>

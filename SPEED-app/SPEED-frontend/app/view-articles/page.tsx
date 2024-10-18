@@ -1,30 +1,28 @@
 "use client"; // Declare this file as a Client Component
 
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Page = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
 
-  // Fetch articles when the component mounts
+  // Fetch approved articles when the component mounts
   useEffect(() => {
-    const fetchArticles = async () => {
+    const fetchApprovedArticles = async () => {
       try {
-        const response = await fetch('http://localhost:8082/api/books');
-        if (!response.ok) {
-          throw new Error('Failed to fetch articles');
-        }
-        const data = await response.json();
-        setArticles(data);
-      } catch (error: any) {
-        setError(error.message);
+        const response = await axios.get(`${apiUrl}/api/books/approved`);
+        setArticles(response.data);
+      } catch (err) {
+        setError('Failed to fetch approved articles');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchArticles();
+    fetchApprovedArticles();
   }, []);
 
   // Handle loading and error states

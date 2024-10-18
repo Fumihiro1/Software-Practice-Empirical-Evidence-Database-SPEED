@@ -1,71 +1,88 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
+
 const Moderation = () => {
-    const articles = [
-      {
-        id: 1,
-        title: "Code Review Best Practices",
-        author: "John Doe",
-        content: "An article about best practices for reviewing code in teams...",
-        status: "Pending",
-      },
-      {
-        id: 2,
-        title: "Unit Testing Tips",
-        author: "Jane Smith",
-        content: "A detailed guide on writing effective unit tests for your applications...",
-        status: "Pending",
-      },
-    ];
-  
-    // Handlers for approving and rejecting articles
-    const handleApprove = (id: number) => {
-      console.log(`Article ${id} approved`);
-      // You can add API call here to approve the article
-    };
-  
-    const handleReject = (id: number) => {
-      console.log(`Article ${id} rejected`);
-      // You can add API call here to reject the article
+  const [pendingArticles, setPendingArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
+
+  // Fetch pending articles when the component mounts
+  useEffect(() => {
+    const fetchPendingArticles = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/books/pending`);  // Fetch only pending articles
+        setPendingArticles(response.data);
+      } catch (err) {
+        setError('Failed to fetch pending articles.');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    return (
-      <main className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6">Moderation Panel</h1>
-  
-        <div className="space-y-6">
-          {articles.map((article) => (
-            <div key={article.id} className="bg-white p-4 rounded shadow">
-              <h2 className="text-2xl font-semibold mb-2">{article.title}</h2>
-              <p className="mb-4 text-gray-700">
-                <strong>Author:</strong> {article.author}
-              </p>
-              <p className="mb-4 text-gray-700">
-                <strong>Content:</strong> {article.content}
-              </p>
-              <p className="mb-4 text-gray-700">
-                <strong>Status:</strong> {article.status}
-              </p>
-  
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => handleApprove(article.id)}
-                  className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={() => handleReject(article.id)}
-                  className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-                >
-                  Reject
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </main>
-    );
+    fetchPendingArticles();
+  }, []);
+
+  // Handle approval
+  const handleApprove = async (id: string) => {
+    try {
+      await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: true });
+      // Remove the approved article from the pending list
+      setPendingArticles(pendingArticles.filter((article) => article._id !== id));
+      alert("Article approved!");
+    } catch (err) {
+      alert("Failed to approve the article.");
+    }
   };
-  
-  export default Moderation;
-  
+
+  // Handle rejection
+  const handleReject = async (id: string) => {
+    try {
+      await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: false });
+      // Remove the rejected article from the pending list
+      setPendingArticles(pendingArticles.filter((article) => article._id !== id));
+      alert("Article rejected!");
+    } catch (err) {
+      alert("Failed to reject the article.");
+    }
+  };
+
+  if (loading) return <p>Loading articles...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
+    <main className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Moderation Panel</h1>
+
+      {pendingArticles.length === 0 ? (
+        <p>No articles to moderate.</p>
+      ) : (
+        pendingArticles.map((article) => (
+          <div key={article._id} className="bg-white p-4 rounded shadow mb-4">
+            <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
+            <p><strong>Author:</strong> {article.author}</p>
+            <p>{article.description}</p>
+            <div className="mt-4 flex space-x-4">
+              <button
+                onClick={() => handleApprove(article._id)}
+                className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+              >
+                Approve
+              </button>
+              <button
+                onClick={() => handleReject(article._id)}
+                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        ))
+      )}
+    </main>
+  );
+};
+
+export default Moderation;
