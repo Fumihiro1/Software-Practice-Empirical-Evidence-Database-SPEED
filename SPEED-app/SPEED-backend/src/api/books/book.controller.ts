@@ -9,16 +9,22 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+
 import { BookService } from './book.service';
 import { CreateBookDto } from './create-book.dto';
 import { error } from 'console';
+
 @Controller('api/books')
+
 export class BookController {
   constructor(private readonly bookService: BookService) {}
+
   @Get('/test')
   test() {
     return this.bookService.test();
-  } // Get all books
+  } 
+  
+  // Get all books
   @Get('/')
   async findAll() {
     try {
@@ -34,6 +40,7 @@ export class BookController {
       );
     }
   }
+
   // Get one book via id
   @Get('/:id')
   async findOne(@Param('id') id: string) {
@@ -50,6 +57,7 @@ export class BookController {
       );
     }
   }
+
   // Create/add a book
   @Post('/')
   async addBook(@Body() createBookDto: CreateBookDto) {
@@ -67,6 +75,7 @@ export class BookController {
       );
     }
   }
+
   // Update a book
   @Put('/:id')
   async updateBook(
@@ -87,6 +96,7 @@ export class BookController {
       );
     }
   }
+  
   // Delete a book via id
   @Delete('/:id')
   async deleteBook(@Param('id') id: string) {
@@ -100,6 +110,23 @@ export class BookController {
         },
         HttpStatus.NOT_FOUND,
         { cause: error },
+      );
+    }
+  }
+
+  // Delete all books
+  @Delete('/')
+  async deleteAllBooks() {
+    try {
+      await this.bookService.deleteAll();
+      return { message: 'All books deleted successfully.' };
+    } catch {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Failed to delete all books.',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
