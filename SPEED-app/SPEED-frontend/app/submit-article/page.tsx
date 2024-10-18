@@ -1,6 +1,5 @@
 "use client"; 
 import { useState } from "react";
-import PageTemplate from '../page-template/page';
 
 const SubmitArticle = () => {
   // State to store form data
@@ -12,7 +11,7 @@ const SubmitArticle = () => {
     published_date: "",
     publisher: "",
     updated_date: "",
-    email: "",  // Add email field
+    email: "",
   });
 
   // Handle form input changes
@@ -27,16 +26,15 @@ const SubmitArticle = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
     try {
       const response = await fetch("http://localhost:8082/api/books", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),  // Send formData directly
+        body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
         alert("Article submitted successfully!");
         setFormData({
@@ -47,7 +45,7 @@ const SubmitArticle = () => {
           published_date: "",
           publisher: "",
           updated_date: "",
-          email: "",  // Reset email field
+          email: "",
         });
       } else {
         alert("Failed to submit the article. Please try again.");
@@ -58,7 +56,8 @@ const SubmitArticle = () => {
     }
   };
 
-  return <PageTemplate pageContent={ 
+  // Page Content
+  return (
     <main className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Submit an Article</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -78,7 +77,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="isbn">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="title">
             ISBN
           </label>
           <input
@@ -108,7 +107,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="author">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
             Author
           </label>
           <input
@@ -123,7 +122,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="published_date">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
             Publish Date
           </label>
           <input
@@ -138,7 +137,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="publisher">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="author">
             Publisher
           </label>
           <input
@@ -153,8 +152,8 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="updated_date">
-            Updated Date
+          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
+            Publish Date
           </label>
           <input
             type="date"
@@ -167,7 +166,6 @@ const SubmitArticle = () => {
           />
         </div>
 
-        {/* Email Field */}
         <div>
           <label className="block text-sm font-medium text-gray-700" htmlFor="email">
             Email
@@ -191,7 +189,7 @@ const SubmitArticle = () => {
         </button>
       </form>
     </main>
-  }/>;
+  );
 };
 
 export default SubmitArticle;

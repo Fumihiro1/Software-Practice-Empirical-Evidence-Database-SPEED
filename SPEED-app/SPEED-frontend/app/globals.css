@@ -10,10 +10,6 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-a {
-  @apply no-underline text-white;
-}
-
 a:hover {
   @apply underline;
 }

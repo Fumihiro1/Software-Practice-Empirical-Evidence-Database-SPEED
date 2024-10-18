@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import PageTemplate from '../page-template/page';
 import axios from 'axios';
 
 const Moderation = () => {
@@ -54,39 +53,35 @@ const Moderation = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <PageTemplate
-      pageContent={
-        <main className="container mx-auto p-6">
-          <h1 className="text-3xl font-bold mb-6">Moderation Panel</h1>
+    <main className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Moderation Panel</h1>
 
-          {pendingArticles.length === 0 ? (
-            <p>No articles to moderate.</p>
-          ) : (
-            pendingArticles.map((article) => (
-              <div key={article._id} className="bg-white p-4 rounded shadow mb-4">
-                <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
-                <p><strong>Author:</strong> {article.author}</p>
-                <p>{article.description}</p>
-                <div className="mt-4 flex space-x-4">
-                  <button
-                    onClick={() => handleApprove(article._id)}
-                    className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => handleReject(article._id)}
-                    className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-                  >
-                    Reject
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </main>
-      }
-    />
+      {pendingArticles.length === 0 ? (
+        <p>No articles to moderate.</p>
+      ) : (
+        pendingArticles.map((article) => (
+          <div key={article._id} className="bg-white p-4 rounded shadow mb-4">
+            <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
+            <p><strong>Author:</strong> {article.author}</p>
+            <p>{article.description}</p>
+            <div className="mt-4 flex space-x-4">
+              <button
+                onClick={() => handleApprove(article._id)}
+                className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+              >
+                Approve
+              </button>
+              <button
+                onClick={() => handleReject(article._id)}
+                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        ))
+      )}
+    </main>
   );
 };
 

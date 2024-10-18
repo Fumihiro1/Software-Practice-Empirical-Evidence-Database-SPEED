@@ -1,6 +1,5 @@
 "use client"; 
 import React, { useEffect, useState } from "react";
-import PageTemplate from "../page-template/page";
 import axios from "axios";
 
 const DeletedArticlesPage = () => {
@@ -41,30 +40,26 @@ const DeletedArticlesPage = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <PageTemplate
-      pageContent={
-        <main className="container mx-auto p-6">
-          <h1 className="text-3xl font-bold mb-6">Deleted Articles</h1>
-          {deletedArticles.length === 0 ? (
-            <p>No deleted articles found.</p>
-          ) : (
-            deletedArticles.map((article: any) => (
-              <div key={article._id} className="bg-gray-200 p-4 rounded shadow mb-4">
-                <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
-                <p className="mb-2"><strong>Author:</strong> {article.author}</p>
-                <p>This article has been deleted by the admin.</p>
-                <button
-                  onClick={() => handleRestore(article._id)}
-                  className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-                >
-                  Restore
-                </button>
-              </div>
-            ))
-          )}
-        </main>
-      }
-    />
+    <main className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Deleted Articles</h1>
+      {deletedArticles.length === 0 ? (
+        <p>No deleted articles found.</p>
+      ) : (
+        deletedArticles.map((article: any) => (
+          <div key={article._id} className="bg-gray-200 p-4 rounded shadow mb-4">
+            <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
+            <p className="mb-2"><strong>Author:</strong> {article.author}</p>
+            <p>This article has been deleted by the admin.</p>
+            <button
+              onClick={() => handleRestore(article._id)}
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+            >
+              Restore
+            </button>
+          </div>
+        ))
+      )}
+    </main>
   );
 };
 
