@@ -9,124 +9,122 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-
 import { BookService } from './book.service';
 import { CreateBookDto } from './create-book.dto';
 import { error } from 'console';
 
 @Controller('api/books')
-
 export class BookController {
-  constructor(private readonly bookService: BookService) {}
+  constructor(private readonly bookService: BookService) { }
 
-  @Get('/test')
-  test() {
-    return this.bookService.test();
-  } 
-  
-  // Get all books
-  @Get('/')
-  async findAll() {
+  // Get all approved books for the view page
+  @Get('/approved')
+  async findApproved() {
+    return this.bookService.findApproved();
+  }
+
+  // Fetch pending and rejected articles for the moderation page
+  @Get('/pending')
+  async findPendingAndRejected() {
+    return this.bookService.findPending();
+  }
+
+  // Approve or reject an article via id
+  @Post('/moderate/:id')
+  async moderateBook(@Param('id') id: string, @Body('approve') approve: boolean) {
     try {
-      return this.bookService.findAll();
+      await this.bookService.moderateBook(id, approve);
+      return { message: `Book ${approve ? 'approved' : 'rejected'} successfully` };
     } catch {
       throw new HttpException(
         {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No Books found',
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Unable to moderate this book',
         },
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
         { cause: error },
       );
     }
   }
 
-  // Get one book via id
-  @Get('/:id')
-  async findOne(@Param('id') id: string) {
-    try {
-      return this.bookService.findOne(id);
-    } catch {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No Book found',
-        },
-        HttpStatus.NOT_FOUND,
-        { cause: error },
-      );
-    }
-  }
-
-  // Create/add a book
   @Post('/')
   async addBook(@Body() createBookDto: CreateBookDto) {
+    console.log("Received Data:", createBookDto);  // Log the received data for inspection
     try {
       await this.bookService.create(createBookDto);
       return { message: 'Book added successfully' };
-    } catch {
+    } catch (error) {
+      console.error("Error while adding book:", error);  // Log any errors
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
           error: 'Unable to add this book',
         },
-        HttpStatus.BAD_REQUEST,
-        { cause: error },
+        HttpStatus.BAD_REQUEST
       );
     }
   }
 
-  // Update a book
-  @Put('/:id')
-  async updateBook(
-    @Param('id') id: string,
-    @Body() createBookDto: CreateBookDto,
-  ) {
+  // Get all books
+  @Get('/')
+  async findAll() {
+    return this.bookService.findAll();
+  }
+
+  // Get deleted articles
+  @Get('/deleted')
+  async findDeleted() {
+    return this.bookService.findDeleted();
+  }
+
+  // Get rejected articles
+  @Get('/rejected')
+  async findRejected() {
+    return this.bookService.findRejected();
+  }
+
+  // Accept a rejected article
+  @Post('/accept/:id')
+  async acceptRejected(@Param('id') id: string) {
+    return this.bookService.acceptRejected(id);
+  }
+
+  // Delete an article
+  @Delete('/:id')
+  async deleteBook(@Param('id') id: string) {
+    return this.bookService.deleteBook(id);
+  }
+
+  // Restore an article (set isDeleted to false)
+  @Post('/restore/:id')
+  async restoreBook(@Param('id') id: string) {
     try {
-      await this.bookService.update(id, createBookDto);
-      return { message: 'Book updated successfully' };
+      await this.bookService.restoreBook(id);
+      return { message: 'Book restored successfully' };
     } catch {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: 'Unable to update this book',
+          error: 'Unable to restore the book',
         },
         HttpStatus.BAD_REQUEST,
-        { cause: error },
-      );
-    }
-  }
-  
-  // Delete a book via id
-  @Delete('/:id')
-  async deleteBook(@Param('id') id: string) {
-    try {
-      return await await this.bookService.delete(id);
-    } catch {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No such a book',
-        },
-        HttpStatus.NOT_FOUND,
-        { cause: error },
       );
     }
   }
 
-  // Delete all books
-  @Delete('/')
-  async deleteAllBooks() {
+  // Reject an article (moderate with false)
+  @Post('/reject/:id')
+  async rejectBook(@Param('id') id: string) {
     try {
-      await this.bookService.deleteAll();
-      return { message: 'All books deleted successfully.' };
-    } catch {
+      await this.bookService.moderateBook(id, false);  // Set approve as false to reject
+      return { message: 'Book rejected and email sent' };
+    } catch (error) {
       throw new HttpException(
         {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Failed to delete all books.',
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Unable to reject the book and send email',
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

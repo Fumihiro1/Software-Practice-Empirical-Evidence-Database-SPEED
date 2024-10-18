@@ -11,6 +11,7 @@ const SubmitArticle = () => {
     published_date: "",
     publisher: "",
     updated_date: "",
+    email: "",
   });
 
   // Handle form input changes
@@ -44,6 +45,7 @@ const SubmitArticle = () => {
           published_date: "",
           publisher: "",
           updated_date: "",
+          email: "",
         });
       } else {
         alert("Failed to submit the article. Please try again.");
@@ -158,6 +160,21 @@ const SubmitArticle = () => {
             id="updated_date"
             name="updated_date"
             value={formData.updated_date}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="email">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             required
