@@ -3,20 +3,20 @@
 import React, { useEffect, useState } from 'react';
 
 const Page = () => {
-  const [articles, setArticles] = useState([]);
+  const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch articles when the component mounts
+  // Fetch books when the component mounts
   useEffect(() => {
-    const fetchArticles = async () => {
+    const fetchBooks = async () => {
       try {
         const response = await fetch('http://localhost:8082/api/books');
         if (!response.ok) {
-          throw new Error('Failed to fetch articles');
+          throw new Error('Failed to fetch books');
         }
         const data = await response.json();
-        setArticles(data);
+        setBooks(data);
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -24,7 +24,7 @@ const Page = () => {
       }
     };
 
-    fetchArticles();
+    fetchBooks();
   }, []);
 
   // Handle loading and error states
@@ -32,7 +32,7 @@ const Page = () => {
     return (
       <main className="p-6 flex-1 bg-gray-100">
         <h2 className="text-2xl font-semibold mb-4">
-          View Articles
+          View Books
         </h2>
         <p className="mb-4">
           Use SPEED to search and analyse claims about various Software Engineering practices.
@@ -46,27 +46,27 @@ const Page = () => {
     return (
       <main className="p-6 flex-1 bg-gray-100">
         <h2 className="text-2xl font-semibold mb-4">
-          View Articles
+          View Books
         </h2>
         <p className="mb-4">
           Use SPEED to search and analyse claims about various Software Engineering practices.
         </p>
-        <p className="mb-4 text-red-500">An error occured while loading articles</p>
+        <p className="mb-4 text-red-500">An error occured while loading books</p>
       </main>
     );
   }
 
-  // Render the page content with articles
+  // Render the page content with books
   return (
     <main className = "p-6 flex-1 bg-gray-100">
       <h2 className="text-2xl font-semibold mb-4">
-          View Articles
+          View Books
       </h2>
       <p className="mb-4">
           Use SPEED to search and analyse claims about various Software Engineering practices.
       </p>
-      {/* Map through articles and render each one */}
-      {articles.map((article:any) => (
+      {/* Map through books and render each one */}
+      {books.map((article:any) => (
           <div key={article.isbn} className="bg-white p-4 rounded shadow mb-4">
           <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
           <p className="mb-2"><strong>Author:</strong> {article.author}</p>
