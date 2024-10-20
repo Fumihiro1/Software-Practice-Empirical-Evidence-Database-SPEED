@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { Book } from "../books"; 
 
-
 const Moderation = () => {
   const [pendingArticles, setPendingArticles] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loadingArticleIds, setLoadingArticleIds] = useState<string[]>([]); // Track loading states for individual articles
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
 
@@ -17,6 +17,8 @@ const Moderation = () => {
       try {
         const response = await axios.get(`${apiUrl}/api/books/pending`);  // Fetch only pending articles
         setPendingArticles(response.data);
+      } catch (error) {
+        setError('Error fetching pending articles');
       } finally {
         setLoading(false);
       }
@@ -27,25 +29,29 @@ const Moderation = () => {
 
   // Handle approval
   const handleApprove = async (id: string) => {
+    setLoadingArticleIds((prev) => [...prev, id]); // Add article ID to loading states
     try {
       await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: true });
-      // Remove the approved article from the pending list
       setPendingArticles(pendingArticles.filter((article) => article._id !== id));
       alert("Article approved!");
     } catch (err) {
       alert("Failed to approve the article.");
+    } finally {
+      setLoadingArticleIds((prev) => prev.filter((articleId) => articleId !== id)); // Remove from loading states
     }
   };
 
   // Handle rejection
   const handleReject = async (id: string) => {
+    setLoadingArticleIds((prev) => [...prev, id]); // Add article ID to loading states
     try {
       await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: false });
-      // Remove the rejected article from the pending list
       setPendingArticles(pendingArticles.filter((article) => article._id !== id));
       alert("Article rejected!");
     } catch (err) {
       alert("Failed to reject the article.");
+    } finally {
+      setLoadingArticleIds((prev) => prev.filter((articleId) => articleId !== id)); // Remove from loading states
     }
   };
 
@@ -68,12 +74,14 @@ const Moderation = () => {
               <button
                 onClick={() => handleApprove(article._id)}
                 className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+                disabled={loadingArticleIds.includes(article._id)} // Disable button during loading
               >
                 Approve
               </button>
               <button
                 onClick={() => handleReject(article._id)}
                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+                disabled={loadingArticleIds.includes(article._id)} // Disable button during loading
               >
                 Reject
               </button>
