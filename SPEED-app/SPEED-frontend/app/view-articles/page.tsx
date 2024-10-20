@@ -39,7 +39,7 @@ const Page = () => {
       <main className="p-8 flex-1 bg-gray-100">
         <h2 className="text-3xl font-semibold mb-4">View Books</h2>
         <p className="mb-4 text-gray-600">
-          Use SPEED to search and analyze claims about various Software Engineering practices.
+          Use SPEED to search and analyse claims about various Software Engineering practices.
         </p>
         <div className="flex justify-center items-center">
           <div className="loader" />
@@ -54,7 +54,7 @@ const Page = () => {
       <main className="p-8 flex-1 bg-gray-100">
         <h2 className="text-3xl font-semibold mb-4">View Books</h2>
         <p className="mb-4 text-gray-600">
-          Use SPEED to search and analyze claims about various Software Engineering practices.
+          Use SPEED to search and analyse claims about various Software Engineering practices.
         </p>
         <p className="mb-4 text-red-500 font-bold">An error occurred while loading books</p>
       </main>
@@ -66,7 +66,7 @@ const Page = () => {
     <main className="p-8 flex-1 bg-gray-100">
       <h2 className="text-3xl font-semibold mb-4">View Books</h2>
       <p className="mb-6 text-gray-600">
-        Use SPEED to search and analyze claims about various Software Engineering practices.
+        Use SPEED to search and analyse claims about various Software Engineering practices.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article: any) => (
