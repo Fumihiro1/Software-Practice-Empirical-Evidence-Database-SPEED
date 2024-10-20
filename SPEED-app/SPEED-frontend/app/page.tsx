@@ -27,6 +27,10 @@ const Page = () => {
        <h3 className="text-x1 font-semibold mb-2">Manage</h3>
        <p>Manage the approval/rejection status of all the articles in the database</p>
      </div>
+     <div className="bg-white p-4 rounded shadow mb-4">
+       <h3 className="text-x1 font-semibold mb-2">Database</h3>
+       <p>Clear or add samples to the database</p>
+     </div>
    </main>
   );
 }

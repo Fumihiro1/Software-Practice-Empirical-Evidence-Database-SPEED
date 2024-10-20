@@ -9,24 +9,26 @@ export class Book {
   title: string;
 
   @Prop({ required: true })
-  isbn: string;
-
-  @Prop({ required: true })
   author: string;
-
-  @Prop()
-  description: string;
 
   @Prop({ type: Date })
   published_date: Date;
 
+  @Prop({ required: true })
+  seMethod: string;  // Added SE Method
+
+  @Prop({ required: true })
+  claim: string;     // Added Claim
+
+  @Prop({ required: true })
+  pageRange: string; // Added Page Range
+
   @Prop()
-  publisher: string;
+  description: string;
 
-  @Prop({ type: Date, default: Date.now })
-  updated_date: Date;
+  @Prop({ required: true }) // Assuming email is required
+  email: string;
 
-  // New fields for moderation
   @Prop({ default: false }) // False means pending, true means approved
   isApproved: boolean;
 
@@ -35,9 +37,6 @@ export class Book {
 
   @Prop({ default: false })
   isDeleted: boolean;
-
-  @Prop()
-  email: string;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);
