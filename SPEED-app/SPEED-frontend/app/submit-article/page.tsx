@@ -5,17 +5,38 @@ const SubmitArticle = () => {
   // State to store form data
   const [formData, setFormData] = useState({
     title: "",
-    isbn: "",
     author: "",
-    description: "",
     published_date: "",
-    publisher: "",
-    updated_date: "",
+    seMethod: "", 
+    claim: "", 
+    description: "",
+    pageRange: "",
     email: "",
   });
 
+  // Options for SE Methods
+  const seMethods = [
+    'Agile',
+    'Scrum',
+    'Waterfall',
+    'Spiral',
+    'V-Model',
+    'DevOps',
+    'Other'
+  ];
+
+  // Options for Claims
+  const claims = [
+    'Improvement in productivity',
+    'Better quality outcomes',
+    'Increased team collaboration',
+    'Cost savings',
+    'Faster delivery times',
+    'Other'
+  ];
+
   // Handle form input changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -37,14 +58,15 @@ const SubmitArticle = () => {
 
       if (response.ok) {
         alert("Article submitted successfully!");
+        // Reset the form data
         setFormData({
           title: "",
-          isbn: "",
           author: "",
-          description: "",
           published_date: "",
-          publisher: "",
-          updated_date: "",
+          seMethod: "",
+          claim: "",
+          pageRange: "",
+          description: "",
           email: "",
         });
       } else {
@@ -77,37 +99,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="title">
-            ISBN
-          </label>
-          <input
-            type="text"
-            id="isbn"
-            name="isbn"
-            value={formData.isbn}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="description">
-            Description
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows={4}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="author">
             Author
           </label>
           <input
@@ -122,7 +114,7 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
+          <label className="block text-sm font-medium text-gray-700" htmlFor="published_date">
             Publish Date
           </label>
           <input
@@ -137,14 +129,56 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="author">
-            Publisher
+          <label className="block text-sm font-medium text-gray-700" htmlFor="seMethod">
+            SE Method
+          </label>
+          <select
+            id="seMethod"
+            name="seMethod"
+            value={formData.seMethod}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="" disabled>Select an SE Method</option>
+            {seMethods.map((method) => (
+              <option key={method} value={method}>
+                {method}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="claim">
+            Claim
+          </label>
+          <select
+            id="claim"
+            name="claim"
+            value={formData.claim}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="" disabled>Select a Claim</option>
+            {claims.map((claim) => (
+              <option key={claim} value={claim}>
+                {claim}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700" htmlFor="pageRange">
+            Page Range
           </label>
           <input
             type="text"
-            id="publisher"
-            name="publisher"
-            value={formData.publisher}
+            id="pageRange"
+            name="pageRange"
+            value={formData.pageRange}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             required
@@ -152,14 +186,14 @@ const SubmitArticle = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700" htmlFor="date">
-            Publish Date
+          <label className="block text-sm font-medium text-gray-700" htmlFor="description">
+            Description
           </label>
           <input
-            type="date"
-            id="updated_date"
-            name="updated_date"
-            value={formData.updated_date}
+            type="text"
+            id="description"
+            name="description"
+            value={formData.description}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             required
