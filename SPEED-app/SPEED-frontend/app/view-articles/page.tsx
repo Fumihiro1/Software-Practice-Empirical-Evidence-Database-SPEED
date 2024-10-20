@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import StarRating from './StarRating'; // Import the updated StarRating component
 
 const Page = () => {
   const [articles, setArticles] = useState([]);
@@ -80,6 +81,14 @@ const Page = () => {
             <p className="mt-4 text-sm text-gray-500">
               <strong>Published Date:</strong> {formatDate(article.published_date)}
             </p>
+            {/* Include the StarRating component */}
+          <StarRating
+            initialRating={0} // You can modify this to use an existing rating if available
+            onRatingChange={(newRating) => {
+              console.log(`Rating for ${article.title}: ${newRating}`);
+              // Here you can handle saving the rating if needed
+            }}
+          />
           </div>
         ))}
       </div>
