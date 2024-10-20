@@ -22,6 +22,10 @@ export class BookService {
     return this.bookModel.create({ ...createBookDto, isDeleted: false });
   }
 
+  async deleteAllBooks(): Promise<void> {
+    await this.bookModel.deleteMany({});
+  }
+
   async update(id: string, createBookDto: CreateBookDto) {
     return await this.bookModel.findByIdAndUpdate(id, createBookDto).exec();
   }

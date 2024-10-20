@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Page = () => {
-  const [books, setBooks] = useState([]);
+  const [Articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
@@ -64,7 +64,7 @@ const Page = () => {
           Use SPEED to search and analyse claims about various Software Engineering practices.
       </p>
       {/* Map through books and render each one */}
-      {books.map((article:any) => (
+      {Articles.map((article:any) => (
           <div key={article.isbn} className="bg-white p-4 rounded shadow mb-4">
           <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
           <p className="mb-2"><strong>Author:</strong> {article.author}</p>

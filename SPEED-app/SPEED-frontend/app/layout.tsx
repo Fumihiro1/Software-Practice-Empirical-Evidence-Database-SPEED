@@ -52,6 +52,11 @@ export default function RootLayout({
                     Manage
                   </a>
                 </li>
+                <li className="mb-2">
+                  <a href="database" className="text-white hover:bg-gray-600 block py-2 px-3 rounded">
+                    Database
+                  </a>
+                </li>
               </ul>
             </nav>
           </aside>
