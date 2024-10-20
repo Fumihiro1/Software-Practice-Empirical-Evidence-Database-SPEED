@@ -65,7 +65,7 @@ const Page = () => {
   // Render the page content with books
   return (
     <main className="p-8 flex-1 bg-gray-100">
-      <h2 className="text-3xl font-semibold mb-4">View Books</h2>
+      <h2 className="text-3xl font-semibold mb-4">View Articles</h2>
       <p className="mb-6 text-gray-600">
         Use SPEED to search and analyse claims about various Software Engineering practices.
       </p>
