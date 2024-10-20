@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { Book } from "../books"; 
+
 
 const Moderation = () => {
-  const [pendingArticles, setPendingArticles] = useState([]);
+  const [pendingArticles, setPendingArticles] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -15,8 +17,6 @@ const Moderation = () => {
       try {
         const response = await axios.get(`${apiUrl}/api/books/pending`);  // Fetch only pending articles
         setPendingArticles(response.data);
-      } catch (err) {
-        setError('Failed to fetch pending articles.');
       } finally {
         setLoading(false);
       }

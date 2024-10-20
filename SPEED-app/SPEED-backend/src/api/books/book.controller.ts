@@ -95,6 +95,23 @@ export class BookController {
     return this.bookService.deleteBook(id);
   }
 
+  // Delete all books
+  @Delete('/')
+  async deleteAllBooks() {
+    try {
+      await this.bookService.deleteAllBooks();
+      return { message: 'All books deleted successfully' };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Unable to delete all books',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   // Restore an article (set isDeleted to false)
   @Post('/restore/:id')
   async restoreBook(@Param('id') id: string) {
