@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-// Define the interface for Article
+
 interface Article {
   _id: string;
   title: string;
@@ -10,7 +10,8 @@ interface Article {
 }
 
 const DeletedArticlesPage = () => {
-  const [deletedArticles, setDeletedArticles] = useState([]);
+  
+  const [deletedArticles, setDeletedArticles] = useState<Article[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +21,7 @@ const DeletedArticlesPage = () => {
   useEffect(() => {
     const fetchDeletedArticles = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/books/deleted`);
+        const response = await axios.get<Article[]>(`${apiUrl}/api/books/deleted`); // Explicitly specify the type of the response
         setDeletedArticles(response.data);
       } catch (err) {
         setError("Failed to fetch deleted articles.");

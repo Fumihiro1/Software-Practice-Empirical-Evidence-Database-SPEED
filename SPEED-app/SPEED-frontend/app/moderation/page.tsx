@@ -4,9 +4,10 @@ import axios from 'axios';
 import { Book } from "../books"; 
 
 const Moderation = () => {
-  const [pendingArticles, setPendingArticles] = useState<Book[]>([]);
+ 
+  const [pendingArticles, setPendingArticles] = useState<Book[]>([]); 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [loadingArticleIds, setLoadingArticleIds] = useState<string[]>([]); // Track loading states for individual articles
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8082';
@@ -15,7 +16,7 @@ const Moderation = () => {
   useEffect(() => {
     const fetchPendingArticles = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/books/pending`);  // Fetch only pending articles
+        const response = await axios.get<Book[]>(`${apiUrl}/api/books/pending`);  // Explicitly specify the type for API response
         setPendingArticles(response.data);
       } catch (error) {
         setError('Error fetching pending articles');
@@ -25,14 +26,14 @@ const Moderation = () => {
     };
 
     fetchPendingArticles();
-  }, []);
+  }, [apiUrl]);
 
   // Handle approval
   const handleApprove = async (id: string) => {
     setLoadingArticleIds((prev) => [...prev, id]); // Add article ID to loading states
     try {
       await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: true });
-      setPendingArticles(pendingArticles.filter((article) => article._id !== id));
+      setPendingArticles(pendingArticles.filter((article) => article._id !== id)); // Filter out the approved article
       alert("Article approved!");
     } catch (err) {
       alert("Failed to approve the article.");
@@ -46,7 +47,7 @@ const Moderation = () => {
     setLoadingArticleIds((prev) => [...prev, id]); // Add article ID to loading states
     try {
       await axios.post(`${apiUrl}/api/books/moderate/${id}`, { approve: false });
-      setPendingArticles(pendingArticles.filter((article) => article._id !== id));
+      setPendingArticles(pendingArticles.filter((article) => article._id !== id)); // Filter out the rejected article
       alert("Article rejected!");
     } catch (err) {
       alert("Failed to reject the article.");

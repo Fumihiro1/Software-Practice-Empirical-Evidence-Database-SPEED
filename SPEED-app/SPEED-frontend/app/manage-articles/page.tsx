@@ -2,10 +2,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+
+interface Article {
+  _id: string;
+  title: string;
+  author?: string;
+  description?: string;
+  published_date?: string;
+  publisher?: string;
+  updated_date?: string;
+}
+
 const AdminPage = () => {
-  const [approvedArticles, setApprovedArticles] = useState([]);
-  const [rejectedArticles, setRejectedArticles] = useState([]);
-  const [deletedArticles, setDeletedArticles] = useState([]);
+  const [approvedArticles, setApprovedArticles] = useState<Article[]>([]);
+  const [rejectedArticles, setRejectedArticles] = useState<Article[]>([]);
+  const [deletedArticles, setDeletedArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,15 +27,15 @@ const AdminPage = () => {
     const fetchArticles = async () => {
       try {
         // Fetch approved articles
-        const approvedResponse = await axios.get(`${apiUrl}/api/books/approved`);
+        const approvedResponse = await axios.get<Article[]>(`${apiUrl}/api/books/approved`);
         setApprovedArticles(approvedResponse.data);
 
         // Fetch rejected articles
-        const rejectedResponse = await axios.get(`${apiUrl}/api/books/rejected`);
+        const rejectedResponse = await axios.get<Article[]>(`${apiUrl}/api/books/rejected`);
         setRejectedArticles(rejectedResponse.data);
 
         // Fetch deleted articles
-        const deletedResponse = await axios.get(`${apiUrl}/api/books/deleted`);
+        const deletedResponse = await axios.get<Article[]>(`${apiUrl}/api/books/deleted`);
         setDeletedArticles(deletedResponse.data);
       } catch (err) {
         setError("Failed to fetch articles.");
@@ -34,7 +45,7 @@ const AdminPage = () => {
     };
 
     fetchArticles();
-  }, []);
+  }, [apiUrl]);
 
   // Handle delete article
   const handleDelete = async (id: string) => {
@@ -43,7 +54,7 @@ const AdminPage = () => {
       // Remove the deleted article from the approved articles list
       setApprovedArticles(approvedArticles.filter((article) => article._id !== id));
       // Refetch the deleted articles to update the deleted list
-      const updatedDeletedArticles = await axios.get(`${apiUrl}/api/books/deleted`);
+      const updatedDeletedArticles = await axios.get<Article[]>(`${apiUrl}/api/books/deleted`);
       setDeletedArticles(updatedDeletedArticles.data);
       alert("Article deleted successfully!");
     } catch (err) {
@@ -69,7 +80,7 @@ const AdminPage = () => {
   return (
     <main className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
-      <p className="mb-4"> View and change each article in the Database</p>
+      <p className="mb-4">View and change each article in the Database</p>
       <a href="deleted-articles" className="text-blue-500">Click here to view and restore deleted articles</a>
       <p className="mb-4"></p>
 
@@ -82,7 +93,7 @@ const AdminPage = () => {
           {approvedArticles.length === 0 ? (
             <p>No approved articles found.</p>
           ) : (
-            approvedArticles.map((article: any) => (
+            approvedArticles.map((article) => (
               <div key={article._id} className="bg-white p-4 rounded shadow mb-4">
                 <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
                 <p className="mb-2"><strong>Author:</strong> {article.author || "Unknown"}</p>
@@ -107,7 +118,7 @@ const AdminPage = () => {
           {rejectedArticles.length === 0 ? (
             <p>No rejected articles found.</p>
           ) : (
-            rejectedArticles.map((article: any) => (
+            rejectedArticles.map((article) => (
               <div key={article._id} className="bg-white p-4 rounded shadow mb-4">
                 <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
                 <p className="mb-2"><strong>Author:</strong> {article.author || "Unknown"}</p>
@@ -128,7 +139,7 @@ const AdminPage = () => {
           {deletedArticles.length === 0 ? (
             <p>No deleted articles found.</p>
           ) : (
-            deletedArticles.map((article: any) => (
+            deletedArticles.map((article) => (
               <div key={article._id} className="bg-gray-200 p-4 rounded shadow mb-4">
                 <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
                 <p className="mb-2"><strong>Author:</strong> {article.author || "Unknown"}</p>
