@@ -1,9 +1,16 @@
-"use client"; 
+"use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// Define the interface for Article
+interface Article {
+  _id: string;
+  title: string;
+  author: string;
+}
+
 const DeletedArticlesPage = () => {
-  const [deletedArticles, setDeletedArticles] = useState([]);
+  const [deletedArticles, setDeletedArticles] = useState<Article[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,7 +30,7 @@ const DeletedArticlesPage = () => {
     };
 
     fetchDeletedArticles();
-  }, []);
+  }, [apiUrl]);
 
   // Handle restore article
   const handleRestore = async (id: string) => {
@@ -45,7 +52,7 @@ const DeletedArticlesPage = () => {
       {deletedArticles.length === 0 ? (
         <p>No deleted articles found.</p>
       ) : (
-        deletedArticles.map((article: any) => (
+        deletedArticles.map((article) => (
           <div key={article._id} className="bg-gray-200 p-4 rounded shadow mb-4">
             <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
             <p className="mb-2"><strong>Author:</strong> {article.author}</p>
