@@ -10,7 +10,7 @@ interface Article {
 }
 
 const DeletedArticlesPage = () => {
-  const [deletedArticles, setDeletedArticles] = useState<Article[]>([]); 
+  const [deletedArticles, setDeletedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
